@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <MenuSettings @addClick="addItemToList" />
+    <MenuSettings />
     <CreateOrder
       :drinks-list="drinksList"
       :food-list="foodList"
@@ -38,12 +38,6 @@ export default {
     },
     snacksList() {
       return this.$store.getters.snacksList;
-    },
-  },
-
-  methods: {
-    addItemToList({ type, name, price }) {
-      this.$store.dispatch("addItemToList", { type, name, price });
     },
   },
 };

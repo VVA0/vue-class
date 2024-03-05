@@ -26,6 +26,15 @@
         placeholder="Добавить стоимость"
       />
 
+      <input v-model="isDiscount" type="checkbox" id="isDiscount" />
+      <label for="id">Добавить скидку</label>
+      <VTextInput
+        v-show="isDiscount"
+        v-model="itemFee"
+        placeholder="Размер скидки"
+        type="number"
+      />
+
       <!-- <button @click="addClick">Добавить</button> -->
       <!-- <VButton @click="addClick" text="Добавить" /> -->
       <VButton @click="addClick">Добавить</VButton>
@@ -67,6 +76,8 @@ export default {
       selectedType: "",
       newItem: "",
       newPrice: "",
+      isDiscount: false,
+      itemFee: 0,
     };
   },
   computed: {
@@ -86,14 +97,18 @@ export default {
   },
   methods: {
     addClick() {
-      this.$emit("addClick", {
+      this.$store.dispatch("addItemToList", {
         type: this.selectedType,
         name: this.newItem,
         price: this.newPrice,
+        fee: parseFloat(this.itemFee / 100).toFixed(2),
+        isDiscount: this.isDiscount,
       });
       this.selectedType = "";
       this.newItem = "";
       this.newPrice = "";
+      this.itemFee = 0;
+      this.isDiscount = false;
     },
   },
 };
@@ -101,7 +116,6 @@ export default {
 
 <style scoped lang="scss">
 .settings-menu {
-  background-color: rgb(200, 212, 183);
   width: 50%;
   height: 100%;
   display: flex;

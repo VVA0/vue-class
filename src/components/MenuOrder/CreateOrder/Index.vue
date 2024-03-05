@@ -12,7 +12,7 @@
 			  :value="item"
 			  v-model="selectedDrinks"
 			/>
-			<label :for="item">{{ item.name }}: {{ item.price }}</label>
+			<label :for="item">{{ item.name }}: {{ getPrice(item) }}</label>
 		 </ol>
 	  </ul> -->
       <!-- <VList
@@ -24,30 +24,30 @@
 	  /> -->
       <VList v-model="selectedDrinks" :items="drinksList" select>
         <template v-slot:item-list="{ item }">
-          {{ item.name }}: {{ item.price }}
+          {{ item.name }}: <ItemPrice :item="item" />
         </template>
       </VList>
       <!-- <ul class="order__list">
 		 <ol v-for="(item, index) in foodList" :key="index">
 			<input type="radio" :value="item" v-model="selectedFood" />
-			<label :for="index">{{ item.name }}: {{ item.price }}</label>
+			<label :for="index">{{ item.name }}: {{ getPrice(item) }}</label>
 		 </ol>
 	  </ul> -->
       <VList v-model="selectedFood" :items="foodList" select>
         <template v-slot:item-list="{ item }">
-          {{ item.name }}: {{ item.price }}
+          {{ item.name }}: <ItemPrice :item="item" />
         </template>
       </VList>
       <!-- <ul class="order__list">
 		 <ol v-for="(item, index) in snacksList" :key="index">
 			<input type="radio" :value="item" v-model="selectedSnacks" />
-			<label :for="index">{{ item.name }}: {{ item.price }}</label>
+			<label :for="index">{{ item.name }}: {{ getPrice(item) }}</label>
 		 </ol>
 	  </ul> -->
 
       <VList v-model="selectedSnacks" :items="snacksList" select>
         <template v-slot:item-list="{ item }">
-          {{ item.name }}: {{ item.price }}
+          {{ item.name }}: <ItemPrice :item="item" />
         </template>
       </VList>
     </div>
@@ -86,26 +86,26 @@
       <VButton @click="createOrder">Сделать заказ</VButton>
     </div>
     <div v-show="shownOrder" class="order__total">
-      <div v-show="isSelectedDrinksShow">
+      <div v-if="isSelectedDrinksShow">
         <input v-model="checkboxDrinks" type="checkbox" id="selectedDrinks" />
         <label for="selectedDrinks">
           Напиток: {{ selectedDrinks?.name }} -
-          {{ selectedDrinks?.price }}
+          <ItemPrice :item="selectedDrinks" />
         </label>
       </div>
 
-      <div v-show="isSelectedFoodShow">
+      <div v-if="isSelectedFoodShow">
         <input v-model="checkboxFood" type="checkbox" id="selectedFood" />
         <label for="seletedFood">
-          Блюдо: {{ selectedFood?.name }} - {{ selectedFood?.price }}
+          Блюдо: {{ selectedFood?.name }} - <ItemPrice :item="selectedFood" />
         </label>
       </div>
 
-      <div v-show="isSelectedSnacksShow">
+      <div v-if="isSelectedSnacksShow">
         <input v-model="checkboxSnacks" type="checkbox" id="selectedSnacks" />
         <label for="seletedSnacks">
           Закуска: {{ selectedSnacks?.name }} -
-          {{ selectedSnacks?.price }}
+          <ItemPrice :item="selectedSnacks" />
         </label>
       </div>
 
@@ -125,6 +125,7 @@ import VList from "@/components/UI/VList.vue";
 import VSelect from "@/components/UI/VSelect.vue";
 import VTextarea from "@/components/UI/VTextarea.vue";
 import VButton from "@/components/UI/VButton.vue";
+import ItemPrice from "@/components/ItemPrice.vue";
 
 export default {
   name: "CreateOrder",
@@ -133,6 +134,7 @@ export default {
     VSelect,
     VTextarea,
     VButton,
+    ItemPrice,
   },
   props: {
     drinksList: { type: Array, default: () => [] },
@@ -159,9 +161,18 @@ export default {
   computed: {
     totalCost() {
       return (
-        (Number(this.selectedDrinks?.price) || 0) +
-        (Number(this.selectedFood?.price) || 0) +
-        (Number(this.selectedSnacks?.price) || 0)
+        (Number(
+          this.selectedDrinks?.price -
+            this.selectedDrinks?.price * this.selectedDrinks?.fee
+        ) || 0) +
+        (Number(
+          this.selectedFood?.price -
+            this.selectedFood?.price * this.selectedFood?.fee
+        ) || 0) +
+        (Number(
+          this.selectedSnacks?.price -
+            this.selectedSnacks?.price * this.selectedSnacks?.fee
+        ) || 0)
       );
     },
     isSelectedDrinksShow() {

@@ -1,6 +1,6 @@
 <template>
   <ul class="list">
-    <li v-for="(item, index) in items" :key="index">
+    <ol v-for="(item, index) in items" :key="index">
       <input
         v-if="select"
         v-model="valueComputed"
@@ -11,7 +11,7 @@
       <label for="id">
         <slot name="item-list" :item="item" />
       </label>
-    </li>
+    </ol>
   </ul>
 </template>
 

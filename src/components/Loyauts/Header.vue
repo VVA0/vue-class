@@ -10,6 +10,15 @@
       HomeWork
     </router-link>
     <router-link class="header__link" :to="{ name: 'menu' }">Меню</router-link>
+    <router-link class="header__link" :to="{ name: 'settings-menu' }">
+      Настройка
+    </router-link>
+    <router-link class="header__link" :to="{ name: 'stock' }">
+      Акции
+    </router-link>
+    <router-link class="header__link" :to="{ name: 'settings-stock' }">
+      Настройка акций
+    </router-link>
   </div>
 </template>
 

@@ -54,6 +54,27 @@ const routes = [
     name: "menu-item",
     component: () => import("@/views/MenuItem.vue"),
   },
+  {
+    path: "/settings-menu",
+    name: "settings-menu",
+    component: () => import("@/views/SettingsMenu.vue"),
+  },
+  {
+    path: "/menu/:category",
+    name: "menu-category",
+    props: true,
+    component: () => import("@/views/MenuCategory.vue"),
+  },
+  {
+    path: "/stock",
+    name: "stock",
+    component: () => import("@/views/Stock.vue"),
+  },
+  {
+    path: "/settings-stock",
+    name: "settings-stock",
+    component: () => import("@/views/SettingsStock.vue"),
+  },
 ];
 
 const router = new VueRouter({

@@ -11,7 +11,7 @@
       <template v-slot:item-list="{ item }">{{ item.text }}</template>
     </Select>
     <Input v-model="newItem" placeholder="Добавить блюдо" />
-    <Input v-model="newPrice" type="number" text="Добавить стоимость" />
+    <Input v-model="newPrice" type="number" placeholder="Добавить стоимость" />
     <Button @click="addNewItem" text="Добавить" />
   </div>
 </template>

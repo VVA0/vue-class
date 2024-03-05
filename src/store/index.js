@@ -7,22 +7,37 @@ const store = new Vuex.Store({
   state: {
     count: 123455,
     foodList: [
-      { name: "Стейк из мраморной говядины", price: 3500 },
-      { name: "Ризотто", price: 1500 },
-      { name: "Осьминог", price: 1700 },
-      { name: "Куринные крылья на гриле", price: 700 },
+      {
+        name: "Стейк из мраморной говядины",
+        price: 3500,
+        isDiscount: true,
+        fee: 0.3,
+      },
+      { name: "Ризотто", price: 1500, isDiscount: false, fee: 0 },
+      { name: "Осьминог", price: 1700, isDiscount: false, fee: 0 },
+      {
+        name: "Куринные крылья на гриле",
+        price: 700,
+        isDiscount: false,
+        fee: 0,
+      },
     ],
     drinksList: [
-      { name: "Вода", price: 300 },
-      { name: "Вино", price: 10000 },
-      { name: "Кола", price: 500 },
-      { name: "Фанта", price: 500 },
+      { name: "Вода", price: 300, isDiscount: false, fee: 0 },
+      { name: "Вино", price: 10000, isDiscount: true, fee: 0.2 },
+      { name: "Кола", price: 500, isDiscount: false, fee: 0 },
+      { name: "Фанта", price: 500, isDiscount: false, fee: 0 },
     ],
     snacksList: [
-      { name: "Бутерброды с красной рыбой", price: 700 },
-      { name: "Мороженое", price: 450 },
-      { name: "Чипсы", price: 350 },
-      { name: "Конфета", price: 150 },
+      {
+        name: "Бутерброды с красной рыбой",
+        price: 700,
+        isDiscount: false,
+        fee: 0,
+      },
+      { name: "Мороженое", price: 450, isDiscount: false, fee: 0 },
+      { name: "Чипсы", price: 350, isDiscount: true, fee: 0.1 },
+      { name: "Конфета", price: 150, isDiscount: false, fee: 0 },
     ],
     selectedDrinks: null,
     selectedFood: null,
@@ -31,6 +46,18 @@ const store = new Vuex.Store({
     nameContact: "",
     emailContact: "",
     messageContact: "",
+    stockList: [
+      {
+        name: "Два по цене одного",
+        text: "Купите одну позицию и вторую получите в подарок",
+        img: "https://ilpatio.ru/wa-data/public/shop/promos/10/03/310/promo_65ca82a11b232694605748.jpg?v=1707770529",
+      },
+      {
+        name: "Два по цене одного",
+        text: "Купите одну позицию и вторую получите в подарок",
+        img: "https://ilpatio.ru/wa-data/public/shop/promos/10/03/310/promo_65ca82a11b232694605748.jpg?v=1707770529",
+      },
+    ],
   },
 
   actions: {
@@ -60,15 +87,7 @@ const store = new Vuex.Store({
     addMenuItem({ commit }, item) {
       commit("setSelectedMenuItem", item);
     },
-    addNameContact({ commit }, value) {
-      commit("setNameContact", value);
-    },
-    addEmailContact({ commit }, value) {
-      commit("setEmailContact", value);
-    },
-    addMessageContact({ commit }, value) {
-      commit("setMessageContact", value);
-    },
+
     showContactData({ state, getters, dispatch }) {
       console.log(
         `name: ${state.nameContact}, email: ${state.emailContact}, message: ${state.messageContact}`
@@ -78,6 +97,18 @@ const store = new Vuex.Store({
     },
     newShowContactData() {
       console.log("newShowContactData");
+    },
+    addNameContact({ commit }, value) {
+      commit("setNameContact", value);
+    },
+    addEmailContact({ commit }, value) {
+      commit("setEmailContact", value);
+    },
+    addMessageContact({ commit }, value) {
+      commit("setMessageContact", value);
+    },
+    addNewStock({ commit }, data) {
+      commit("setNewStock", data);
     },
   },
   mutations: {
@@ -89,6 +120,8 @@ const store = new Vuex.Store({
       state[data.type].push({
         name: data.name,
         price: data.price,
+        fee: data.fee,
+        isDiscount: data.isDiscount,
       });
     },
     setSelectedFood(state, data) {
@@ -111,6 +144,9 @@ const store = new Vuex.Store({
     },
     setMessageContact(state, value) {
       state.messageContact = value;
+    },
+    setNewStock(state, data) {
+      state.stockList.push(data);
     },
   },
   getters: {
@@ -150,6 +186,28 @@ const store = new Vuex.Store({
     },
     contactData(state) {
       return `from getter name: ${state.nameContact}, email: ${state.emailContact}, message: ${state.messageContact}`;
+    },
+    discountsList(state) {
+      let result = [];
+      result.push(
+        ...state.foodList.filter((item) => {
+          return item.isDiscount;
+        })
+      );
+      result.push(
+        ...state.snacksList.filter((item) => {
+          return item.isDiscount;
+        })
+      );
+      result.push(
+        ...state.drinksList.filter((item) => {
+          return item.isDiscount;
+        })
+      );
+      return result;
+    },
+    stockList(state) {
+      return state.stockList;
     },
   },
 });

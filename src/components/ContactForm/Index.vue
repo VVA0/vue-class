@@ -29,7 +29,7 @@ export default {
   computed: {
     computedName: {
       get() {
-        return this.$store.getters.nameContact;
+        return this.$store.getters.NameContact;
       },
       set(value) {
         this.$store.dispatch("addNameContact", value);

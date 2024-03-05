@@ -26,6 +26,7 @@
         :items="notReserveTable"
         item-text="number"
         item-value="number"
+        default-item="Выберите столик"
         :class="{ 'settings-error': error.table }"
       >
         <template v-slot:default>Выберите столик</template>
@@ -39,21 +40,21 @@
       <div v-show="shownOrder">
         <div v-show="isSelectFoodShow">
           <input v-model="checkboxFood" type="checkbox" :id="selectFood" />
-          <label for="selectFood">
+          <label for="id">
             Блюдо: {{ selectFood?.name }}: {{ selectFood?.price }}
           </label>
         </div>
 
-        <div v-show="isSelectSnackShow">
+        <div v-show="isSelectDrinkShow">
           <input v-model="checkboxDrink" type="checkbox" :id="selectDrink" />
-          <label for="selectDrink">
+          <label for="id">
             Напиток: {{ selectDrink?.name }}: {{ selectDrink?.price }}
           </label>
         </div>
 
         <div v-show="isSelectSnackShow">
-          <input v-model="selectSnack" type="checkbox" :id="selectSnack" />
-          <label for="selectSnack">
+          <input v-model="checkboxSnack" type="checkbox" :id="selectSnack" />
+          <label for="id">
             Закуска: {{ selectSnack?.name }}: {{ selectSnack?.price }}
           </label>
         </div>
@@ -88,15 +89,15 @@ export default {
     return {
       selectTable: "",
       tables: [
-        { table: 1, reserved: true },
-        { table: 2, reserved: false },
-        { table: 3, reserved: false },
+        { number: 1, reserved: true },
+        { number: 2, reserved: false },
+        { number: 3, reserved: false },
       ],
       commentToOrder: "",
       checkboxFood: false,
       checkboxDrink: false,
       checkboxSnack: false,
-      error: { table: true },
+      error: { table: false },
       shownOrder: false,
     };
   },
@@ -150,20 +151,28 @@ export default {
       this.$emit("createOrder");
     },
     deleteSelectItem() {
-      this.this.$emit("deleteSelectItem");
-    },
-    deleteSelectItem() {
-      if (this.selectFood) {
+      if (this.checkboxFood) {
         this.selectFood = null;
         this.checkboxFood = false;
       }
-      if (this.selectDrink) {
+      if (this.checkboxDrink) {
         this.selectDrink = null;
         this.checkboxDrink = false;
       }
-      if (this.selectSnack) {
+      if (this.checkboxSnack) {
         this.selectSnack = null;
         this.checkboxSnack = false;
+      }
+    },
+    createOrder() {
+      if (this.selectTable) {
+        this.shownOrder = true;
+      } else {
+        alert("Сначала выберите столик");
+        this.error.table = true;
+        setTimeout(() => {
+          this.error.table = false;
+        }, 3000);
       }
     },
   },

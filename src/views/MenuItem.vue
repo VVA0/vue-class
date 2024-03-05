@@ -1,31 +1,25 @@
 <template>
-  <div>{{ name }}: {{ price }}</div>
+  <div>
+    <div v-if="selectedMenuItem">
+      {{ selectedMenuItem.name }}: <ItemPrice :item="selectedMenuItem" />
+    </div>
+    <div v-else>Ничего не выбрано!</div>
+  </div>
 </template>
 
 <script>
-import VButton from "@/components/UI/VButton.vue";
+import ItemPrice from "@/components/ItemPrice.vue";
 
 export default {
   name: "MenuItem",
+  components: {
+    ItemPrice,
+  },
   computed: {
     selectedMenuItem() {
       return this.$store.getters.selectedMenuItem;
     },
-    name() {
-      if (this.selectedMenuItem) {
-        return this.selectedMenuItem.name;
-      }
-      return "Ничего не выбрано!";
-    },
-    price() {
-      if (this.selectedMenuItem) {
-        return this.selectedMenuItem.price;
-      }
-      return "Ничего не выбрано!";
-    },
   },
-
-  components: { VButton },
 };
 </script>
 
